@@ -1,0 +1,93 @@
+/* colour the canvas black and make it fill the inside of the webpage. Anchor it to the top left corner.*/
+canvas {
+    background-color: #000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+/* Stretch the gameTable to fill the webpage. Give it a red border*/
+#gameTable {
+    width: 100%;
+    height: 100%;
+}
+
+/* Disable highlighting of text */
+body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Give the first table row a height of 5% */
+tr:first-child {
+    height: 5%;
+}
+
+/* Give every other row a height of 33.33%.*/
+tr:not(:first-child) {
+    height: 33.33%;
+}
+
+/* Hide tds in not first trs. */
+tr:not(:first-child) td {
+    display: none;
+}
+
+/* Give each td a dark gray background and rounded corners. Each td should take up 1/3rd of the row. Opacity 90%.*/
+td {
+    background-color: #333;
+    border-radius: 5px;
+    width: 33.33%;
+    opacity: 0.9;
+}
+
+/* Color the title yellow and center it. Give it a modern font.*/
+h1 {
+    color: yellow;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Each container div should fill it's cell */
+.container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+/* Anchor each title class to the top of it's cell and center it. Give it a margin of 10px. */
+.title {
+    position: relative;
+    top: 0;
+    text-align: center;
+    margin: 10px;
+}
+
+/* Center each description class. Give it a margin of 10px. */
+.description {
+    text-align: center;
+    margin: 10px;
+}
+
+/* Center couner classes in their divs. Give them an extra large and fun font. Make them bright green. */
+.counter {
+    text-align: center;
+    font-size: 50px;
+    font-family: 'Roboto', sans-serif;
+    color: #0f0;
+}
+
+/* Each manualBuy class should fill the bottom 10% of it's div with a bottom margin of 5px. Round it's corners. */
+.manualBuy {
+    height: 10%;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
