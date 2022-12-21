@@ -74,12 +74,21 @@ h1 {
     margin: 10px;
 }
 
-/* Center couner classes in their divs. Give them an extra large and fun font. Make them bright green. */
+/* Center coutner classes in their divs. Give them an extra large and fun font. Make them bright green. */
 .counter {
     text-align: center;
     font-size: 50px;
     font-family: 'Roboto', sans-serif;
     color: #0f0;
+}
+
+/* Center progressBar classes in their divs. Width 100%. Centered above the button */
+.progressBar {
+    height: 5%;
+    width: 95%;
+    left: 2.5%;
+    position: absolute;
+    top: 84%;
 }
 
 /* Each manualBuy class should fill the bottom 10% of it's div with a bottom margin of 5px. Round it's corners. */
