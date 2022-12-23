@@ -33,8 +33,8 @@ tr:not(:first-child) {
     height: 33.33%;
 }
 
-/* Hide tds in not first trs. */
-tr:not(:first-child) td {
+/* Hide tds in not first trs and hide cell10. */
+tr:not(:first-child) td, #cell10 {
     display: none;
 }
 
@@ -42,7 +42,7 @@ tr:not(:first-child) td {
 td {
     background-color: #333;
     border-radius: 5px;
-    width: 33.33%;
+    width: 25%;
     opacity: 0.9;
 }
 
