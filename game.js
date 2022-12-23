@@ -3,14 +3,23 @@ var game = new Object();
 const flourBought = new Event('flourBought');
 const waterBought = new Event('waterBought');
 const macaroniBought = new Event('macaroniBought');
+const millerBought = new Event('millerBought');
+const pumpBought = new Event('pumpBought');
+const chefBought = new Event('chefBought');
 
 function startGame() {
     //set default game values
     game.flour = 0;
     game.water = 0;
     game.macaroni = 0;
+    game.miller = 0;
+    game.pump = 0;
+    game.chef = 0;
     game.waterUnlocked = false;
     game.macaroniUnlocked = false;
+    game.millerUnlocked = false;
+    game.pumpUnlocked = false;
+    game.chefUnlocked = false;
     game.canvas = document.getElementById("canvas");
     game.particles = new Array();
     game.canvas.width = window.innerWidth;
@@ -62,11 +71,58 @@ function startGame() {
     document.addEventListener('macaroniBought', function(e) {
         if(game.macaroni >= 50) {
             //reveal fourth cell
-            revealCell(4);
-            document.getElementById("macaroniBar").max = 1000;
+            if(!game.millerUnlocked){
+                revealCell(4);
+                game.millerUnlocked = true;
+                document.getElementById("macaroniBar").max = 100;
 
-            //remove the event listener
-            document.removeEventListener('macaroniBought', arguments.callee);
+                //add an onclick event to millerButton that calls buyMiller()
+                document.getElementById("millerButton").onclick = () => { buyMiller(1); };
+
+                //add an onclick event to millerButton2 that calls sellMiller()
+                document.getElementById("millerButton2").onclick = () => { sellMiller(1); };
+            }
+            
+        }
+    });
+
+    //add an event listener for millerBought
+    document.addEventListener('millerBought', function(e) {
+        if(game.miller >= 10) {
+            //reveal fifth cell
+            if(!game.pumpUnlocked){
+                revealCell(5);
+                game.pumpUnlocked = true;
+
+                //add an onclick event to pumpButton that calls buyPump()
+                document.getElementById("pumpButton").onclick = () => { buyPump(1); };
+
+                //add an onclick event to pumpButton2 that calls sellPump()
+                document.getElementById("pumpButton2").onclick = () => { sellPump(1); };
+
+                //remove the event listener
+                document.removeEventListener('millerBought', arguments.callee);
+            }
+        }
+    });
+
+    //add an event listener for pumpBought
+    document.addEventListener('pumpBought', function(e) {
+        if(game.pump >= 10) {
+            //reveal sixth cell
+            if(!game.chefUnlocked){
+                revealCell(6);
+                game.chefUnlocked = true;
+
+                //add an onclick event to chefButton that calls buyChef()
+                document.getElementById("chefButton").onclick = () => { buyChef(1); };
+
+                //add an onclick event to chefButton2 that calls sellChef()
+                document.getElementById("chefButton2").onclick = () => { sellChef(1); };
+
+                //remove the event listener
+                document.removeEventListener('pumpBought', arguments.callee);
+            }
         }
     });
     
@@ -111,20 +167,151 @@ function buyMacaroni(x) {
     //decrease water by 1
     game.water -= x;
 
+    //dispatch the macaroniBought event
+    document.dispatchEvent(macaroniBought);
+
     //add a particle
     game.particles.push({x: Math.random() * game.canvas.width, y: 0, radius: 1, color: "yellow", speed: 3});
+}
+
+//buyMiller increases miller by x but reduces macaroni by 10x
+function buyMiller(x) {
+    if(game.macaroni < 10*x) {
+        return;
+    }
+
+    //increase miller by 1
+    game.miller += x;
+
+    //decrease macaroni by 10
+    game.macaroni -= 10*x;
+
+    //dispatch the millerBought event
+    document.dispatchEvent(millerBought);
+}
+
+//sellMiller decreases miller by x but increases macaroni by 5x
+function sellMiller(x) {
+    if(game.miller < x) {
+        return;
+    }
+
+    //decrease miller by 1
+    game.miller -= x;
+
+    //increase macaroni by 5
+    game.macaroni += 5*x;
+}
+
+//buyPump increases pump by x but reduces macaroni by 10x
+function buyPump(x) {
+    if(game.macaroni < 10*x) {
+        return;
+    }
+
+    //increase pump by 1
+    game.pump += x;
+
+    //decrease macaroni by 10
+    game.macaroni -= 10*x;
+
+    //dispatch the pumpBought event
+    document.dispatchEvent(pumpBought);
+}
+
+//sellPump decreases pump by x but increases macaroni by 5x
+function sellPump(x) {
+    if(game.pump < x) {
+        return;
+    }
+
+    //decrease pump by 1
+    game.pump -= x;
+
+    //increase macaroni by 5
+    game.macaroni += 5*x;
+}
+
+//buyChef increases chef by x but reduces macaroni by 10x
+function buyChef(x) {
+    if(game.macaroni < 10*x) {
+        return;
+    }
+
+    //increase chef by 1
+    game.chef += x;
+
+    //decrease macaroni by 10
+    game.macaroni -= 10*x;
+
+    //dispatch the chefBought event
+    document.dispatchEvent(chefBought);
+}
+
+//sellChef decreases chef by x but increases macaroni by 5x
+function sellChef(x) {
+    if(game.chef < x) {
+        return;
+    }
+
+    //decrease chef by 1
+    game.chef -= x;
+
+    //increase macaroni by 5
+    game.macaroni += 5*x;
+}
+
+//millFlour makes flour but consumes macaroni
+function millFlour(x) {
+    if(game.macaroni < 0.1*x) {
+        return;
+    }
+    game.flour += x;
+    game.macaroni -= 0.1*x;
+}
+
+//pumpWater makes water but consumes macaroni
+function pumpWater(x) {
+    if(game.macaroni < 0.1*x) {
+        return;
+    }
+    game.water += x;
+    game.macaroni -= 0.1*x;
+}
+
+//cookMacaroni makes macaroni but consumes flour, water, and macaroni
+function cookMacaroni(x) {
+    if(game.flour < x || game.water < x || game.macaroni < 0.1*x) {
+        return;
+    }
+    game.macaroni += x;
+    game.flour -= x;
+    game.water -= x;
+    game.macaroni -= 0.1*x;
 }
 
 // Update the game
 function updateGame() {
     drawGame();
     //update the flour display
-    document.getElementById("flourDisplay").innerHTML = game.flour;
+    document.getElementById("flourDisplay").innerHTML = Math.floor(game.flour);
     document.getElementById("flourBar").value = game.flour;
-    document.getElementById("waterDisplay").innerHTML = game.water;
+    document.getElementById("waterDisplay").innerHTML = Math.floor(game.water);
     document.getElementById("waterBar").value = game.water;
-    document.getElementById("macaroniDisplay").innerHTML = game.macaroni;
+    document.getElementById("macaroniDisplay").innerHTML = Math.floor(game.macaroni);
     document.getElementById("macaroniBar").value = game.macaroni;
+    document.getElementById("millerDisplay").innerHTML = Math.floor(game.miller);
+    document.getElementById("millerBar").value = game.miller;
+    document.getElementById("pumpDisplay").innerHTML = Math.floor(game.pump);
+    document.getElementById("pumpBar").value = game.pump;
+    document.getElementById("chefDisplay").innerHTML = Math.floor(game.chef);
+    document.getElementById("chefBar").value = game.chef;
+
+    //run autobuyers
+    millFlour(game.miller);
+    pumpWater(game.pump);
+    cookMacaroni(game.chef);
+
 }
 
 // Draw the game

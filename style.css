@@ -100,3 +100,18 @@ h1 {
     margin-bottom: 5px;
     border-radius: 5px;
 }
+
+/* Each manualHire and manualFire class should fill 50% of the bottom 10% of it's div with a bottom margin of 5px. Round it's corners. */
+.manualHire, .manualFire {
+    height: 10%;
+    width: 50%;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+/* ManualFire should be anchored to the right of it's div. */
+.manualFire {
+    right: 0;
+}
